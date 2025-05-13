@@ -1,0 +1,20 @@
+package tn.souhaib.erp.Entities;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
+public class HistoriqueAchats {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String produit;
+    private int quantite;
+    private int delai_livraison;
+
+    @ManyToOne
+    private Fournisseur fournisseur;
+}
