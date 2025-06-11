@@ -1,7 +1,5 @@
 package tn.souhaib.erp.Controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,26 +35,27 @@ public class FournisseurController {
     public Fournisseur createFournisseur(@RequestBody Fournisseur fournisseur) {
         return fournisseurRepository.save(fournisseur);
     }
-@PatchMapping("/{id}")
-public ResponseEntity<Fournisseur> patchFournisseur(@PathVariable Long id, @RequestBody Fournisseur updatedFournisseur) {
-    return fournisseurRepository.findById(id).map(f -> {
-        if (updatedFournisseur.getNom() != null) {
-            f.setNom(updatedFournisseur.getNom());
-        }
-        if (updatedFournisseur.getContact() != null) {
-            f.setContact(updatedFournisseur.getContact());
-        }
-        if (updatedFournisseur.getQualite_service() != null) {
-            f.setQualite_service(updatedFournisseur.getQualite_service());
-        }
-        if (updatedFournisseur.getNote() != 0) { // note is `int`, so 0 = default/unset
-            f.setNote(updatedFournisseur.getNote());
-        }
-        fournisseurRepository.save(f);
-        return ResponseEntity.ok(f);
-    }).orElseGet(() -> ResponseEntity.notFound().build());
-}
 
+    // PATCH update partial
+    @PatchMapping("/{id}")
+    public ResponseEntity<Fournisseur> patchFournisseur(@PathVariable Long id, @RequestBody Fournisseur updatedFournisseur) {
+        return fournisseurRepository.findById(id).map(f -> {
+            if (updatedFournisseur.getNom() != null) {
+                f.setNom(updatedFournisseur.getNom());
+            }
+            if (updatedFournisseur.getContact() != null) {
+                f.setContact(updatedFournisseur.getContact());
+            }
+            if (updatedFournisseur.getQualite_service() != null) {
+                f.setQualite_service(updatedFournisseur.getQualite_service());
+            }
+            if (updatedFournisseur.getNote() != 0) {
+                f.setNote(updatedFournisseur.getNote());
+            }
+            fournisseurRepository.save(f);
+            return ResponseEntity.ok(f);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     // DELETE
     @DeleteMapping("/{id}")
@@ -66,5 +65,23 @@ public ResponseEntity<Fournisseur> patchFournisseur(@PathVariable Long id, @Requ
         }
         fournisseurRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // SEARCH by nom
+    @GetMapping("/search/nom/{nom}")
+    public List<Fournisseur> searchByNom(@PathVariable String nom) {
+        return fournisseurRepository.findByNomContainingIgnoreCase(nom);
+    }
+
+    // SEARCH by contact
+    @GetMapping("/search/contact/{contact}")
+    public List<Fournisseur> searchByContact(@PathVariable String contact) {
+        return fournisseurRepository.findByContactContainingIgnoreCase(contact);
+    }
+
+    // SEARCH by note
+    @GetMapping("/search/note/{note}")
+    public List<Fournisseur> searchByNote(@PathVariable int note) {
+        return fournisseurRepository.findByNote(note);
     }
 }

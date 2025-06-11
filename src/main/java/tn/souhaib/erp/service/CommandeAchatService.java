@@ -1,5 +1,7 @@
 package tn.souhaib.erp.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,9 @@ import tn.souhaib.erp.Repository.CommandeAchatRepository;
 import tn.souhaib.erp.Repository.FournisseurRepository;
 import tn.souhaib.erp.Repository.HistoriqueAchatsRepository;
 import tn.souhaib.erp.Repository.LigneCommandeAchatRepository;
+import tn.souhaib.erp.dto.CommandeAchatDTO;
 import tn.souhaib.erp.dto.CommandeAchatRequest;
+import tn.souhaib.erp.dto.LigneCommandeAchatDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +63,21 @@ public class CommandeAchatService {
             historiqueAchatsRepository.save(historique); 
         }
     }
+    
+    
+    public List<LigneCommandeAchat> getAllLignes() {
+        return ligneCommandeAchatRepository.findAll();
+    }
+    public CommandeAchat updateCommande(Long id, CommandeAchatDTO dto) {
+        CommandeAchat commande = commandeAchatRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Commande non trouvée"));
+
+        commande.setDate(dto.getDate());
+        commande.setStatut(dto.getStatut());
+        commande.setMontant(dto.getMontant());
+
+        return commandeAchatRepository.save(commande);
+    }
+
 }
 

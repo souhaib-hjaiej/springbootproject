@@ -11,7 +11,7 @@ import tn.souhaib.erp.Entities.LigneCommandeAchat;
 import tn.souhaib.erp.dto.OffreFournisseurDTO;
 
 @Repository
-public interface LigneCommandeRepository extends CrudRepository<LigneCommandeAchat, Long> {
+public interface Comparison extends CrudRepository<LigneCommandeAchat, Long> {
 
     @Query("SELECT new tn.souhaib.erp.dto.OffreFournisseurDTO(" +
            "f.nom, " +
